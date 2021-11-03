@@ -8,6 +8,8 @@ and there may be overlapping features called \
 Zhikai ran EDTA to get a list of STRUCTURAL and HOMOLOGY based repetitive sequences \
 I'm splitting these into the two categories to provide some summary statistics \
 
+File used for analysis = Struct_Hom_TE_analysis.xlsx \
+
 ## STRUCTURAL
 In total, 9,459 elements were identified (see image for summary) \
 I'm using Bedtools subtract to determine how many Mb of the genome this represents \
