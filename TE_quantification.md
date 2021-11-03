@@ -1,14 +1,14 @@
 There are a few ways to annotate predicted TEs in a genome \
 One of these relies on detection of structural TE elements (STRUCTURAL) \
-Another looks for sequences with similarity to known TE elements (HOMOLOGY) \
+Another looks for sequences with similarity to known TE elements (HOMOLOGY) 
 
 In both cases, there are repetitive sequences called that are not necessarily TEs \
-and there may be overlapping features called \
+and there may be overlapping features called 
 
 Zhikai ran EDTA to get a list of STRUCTURAL and HOMOLOGY based repetitive sequences \
-I'm splitting these into the two categories to provide some summary statistics \
+I'm splitting these into the two categories to provide some summary statistics 
 
-File used for analysis = Struct_Hom_TE_analysis.xlsx \
+File used for analysis = Struct_Hom_TE_analysis.xlsx 
 
 ## STRUCTURAL
 In total, 9,459 elements were identified (see image for summary) \
