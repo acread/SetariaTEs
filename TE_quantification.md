@@ -27,6 +27,7 @@ Using bedtools again to determine how many Mb of the genome this represents \
 
 ````
 #bedtools
+bedtools subtract -a Svm_Chrs.bed -b Svm_STRUCT_TE_MINIMAL.bed > Svm_Chrs_minusSTRUCT_TEs.bed
 ````
 
 ![image](https://user-images.githubusercontent.com/43852873/140174571-3ccb72de-5874-489e-9ec4-027491e64505.png)
@@ -49,6 +50,20 @@ Using bedtools again to determine how many Mb of the genome this represents \
 
 ````
 #bedtools
+bedtools subtract -a Svm_Chrs.bed -b Svm_HomologyTE_MINIMAL.bed > Svm_Chrs_minusHomology_TEs.bed
 ````
 
 ![image](https://user-images.githubusercontent.com/43852873/140175165-8fcd72a9-03a0-45f6-aae3-317066032057.png)
+
+To determine the total bp and percent homology and structural TEs I just summed the output of the bedtools subtract \
+and divided this by the total length of the genome \
+summarized below \
+it looks like ~4% of the genome is annotated as STRUCTURAL TEs and ~29% annotated as HOMOLOGY TEs \
+**I'm pretty sure this was an iterative annotation.  First Structural TEs were identified and then Homology TEs - this \
+means that the sum of the two is the total amount of the genome annotated as TE (in other words, I don't think there is \
+overlap in the two annotations)**
+
+![image](https://user-images.githubusercontent.com/43852873/140373438-cb942db9-2b64-47d6-9983-873c5ca1e9b5.png)
+
+
+````
