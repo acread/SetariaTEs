@@ -124,8 +124,8 @@ table(DST_Closest$V5, DST_Closest$V11<2000)
 ````
 
 I'm a little bit surprised by the results of this analysis -- it seems that relatively few homology TEs have CHH DMTs in or near the element \
-I'm wondering if this is based on the filters I've put in place - in other words, how many of these elements had the potential to be \
-classified as CHH-DMTs? (they need data in both TC and Mutant)
+**I'm wondering if this is based on the filters I've put in place - in other words, how many of these elements had the potential to be \
+classified as CHH-DMTs? (they need data in both TC and Mutant)**
 
 As an example here are the counts for within 2kb of all Struct TEs followed by within 2kb of DE-Up TEs\
 `````
@@ -167,3 +167,82 @@ Milhouse w/in 2kb
   CHH_Intermediate     5   10
   HyperCHH             8    7
 ````
+
+To figure out how much of the Homology TEs are made up of 'missing data' in TC or MUT, I generated a file containing all 'missing data' tiles for /
+each context/
+These were used in bedtools subtract to determine how much of the TEs is NOT missing data
+I summed this by chromosome and divided by the total Hom TE length per chromosome to determine what percent of the Hom TE annotation is 'missing data'
+
+````
+bedtools subtract -a Minimal_HomTEs.bed -b TC_missing_data.bed > Minimal_HomTEs_minus_TC_missing.txt  
+bedtools subtract -a Minimal_HomTEs.bed -b MUT_missing_data.bed > Minimal_HomTEs_minus_MUT_missing.txt
+````
+
+````R
+###I'm creating bed files for tiles classed as missing data in TC and MUT
+TC_missing_data=subset(Complete_DRM_S_R, TC_Class=='Missing_Data')
+TC_missing_data=TC_missing_data[,c("Tile","TC_Class")]
+
+TC_missing_data.bed <- data.frame(do.call('rbind', strsplit(as.character(TC_missing_data$Tile),':',fixed=TRUE)))
+TC_missing_data.bed = TC_missing_data.bed$X1
+TC_missing_data2.bed = data.frame(do.call('rbind', strsplit(as.character(TC_missing_data.bed$X2),'-',fixed=TRUE)))
+TC_missing_data3.bed = dplyr::bind_cols(TC_missing_data.bed,TC_missing_data2.bed,TC_missing_data)
+TC_missing_data.bed=dplyr::select(TC_missing_data3.bed, "...1","X1","X2","TC_Class" )
+write.table(TC_missing_data.bed,"TC_missing_data.bed",quote=FALSE,row.names=FALSE,col.names=FALSE,sep="\t")
+
+MUT_missing_data.bed <- data.frame(do.call('rbind', strsplit(as.character(MUT_missing_data$Tile),':',fixed=TRUE)))
+MUT_missing_data2.bed = data.frame(do.call('rbind', strsplit(as.character(MUT_missing_data.bed$X2),'-',fixed=TRUE)))
+MUT_missing_data3.bed = dplyr::bind_cols(MUT_missing_data.bed,MUT_missing_data2.bed,MUT_missing_data)
+#MUT_missing_data.bed = MUT_missing_data.bed$X1
+MUT_missing_data.bed=dplyr::select(MUT_missing_data3.bed, "X1...1","X1...3","X2...4","MUT_Class" )
+write.table(MUT_missing_data.bed,"MUT_missing_data.bed",quote=FALSE,row.names=FALSE,col.names=FALSE,sep="\t")
+
+#I used bedtools to subtract the missing data from the Homology TE annotation
+TE_less_TC_missing=read.table("Minimal_HomTEs_minus_TC_missing.txt",header=FALSE, sep="\t")
+TE_less_TC_missing$len=TE_less_TC_missing$V3-TE_less_TC_missing$V2+1
+TE_less_TC_missingtable=aggregate(TE_less_TC_missing$len, by=list(Category=TE_less_TC_missing$V1), FUN=sum)
+
+TE_less_MUT_missing=read.table("Minimal_HomTEs_minus_MUT_missing.txt",header=FALSE, sep="\t")
+TE_less_MUT_missing$len=TE_less_MUT_missing$V3-TE_less_MUT_missing$V2+1
+TE_less_MUT_missingtable=aggregate(TE_less_MUT_missing$len, by=list(Category=TE_less_MUT_missing$V1), FUN=sum)
+
+##read in TE by chromosome file
+TE_len_byChr=read.table("Len_Annot_HomTE.txt",header=FALSE, sep="\t")
+
+TE_less_TC_missingtable$len=TE_len_byChr$V1
+TE_less_TC_missingtable$percentmissing=(1-(TE_less_TC_missingtable$x/TE_less_TC_missingtable$len))*100
+
+TE_less_MUT_missingtable$len=TE_len_byChr$V1
+TE_less_MUT_missingtable$percentmissing=(1-(TE_less_MUT_missingtable$x/TE_less_MUT_missingtable$len))*100
+````
+
+TC
+````
+  Category       x     len percentmissing
+1    Chr01 1150684 1540108       25.28550
+2    Chr02 1756723 2287856       23.21532
+3    Chr03 1693599 2273608       25.51051
+4    Chr04 1262381 1674914       24.63010
+5    Chr05 1340038 1786372       24.98550
+6    Chr06 1134988 1542670       26.42704
+7    Chr07  962026 1350649       28.77306
+8    Chr08 1414941 2069019       31.61295
+9    Chr09 1842116 2358367       21.89019
+````
+MUT
+````
+  Category       x     len percentmissing
+1    Chr01 1152647 1540108       25.15804
+2    Chr02 1757153 2287856       23.19652
+3    Chr03 1696237 2273608       25.39448
+4    Chr04 1269568 1674914       24.20100
+5    Chr05 1337578 1786372       25.12321
+6    Chr06 1137349 1542670       26.27399
+7    Chr07  955727 1350649       29.23942
+8    Chr08 1415664 2069019       31.57801
+9    Chr09 1850686 2358367       21.52680
+````
+
+
+**In summary - about 25% of the homology TE annotation is 'missing data' -- I haven't extended this to the region surrounding \
+the TEs - which might make sense given that this is where I'm looking for the closest DMT...**
