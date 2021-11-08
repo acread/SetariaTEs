@@ -73,3 +73,38 @@ Chr01	35139743	35151209	Milhouse-11	CHH_Intermediate	Chr01	35150500	35150600	Hig
 Chr01	35139743	35151209	Milhouse-11	HyperCHH	Chr01	35176300	35176400	97.82063113	25092
 
 ````
+
+Using R to parse the list by context:
+
+````R
+
+setwd("/Users/read0094/Desktop/DMRs/MinimalTEs_DistancetoHypoDMT/")
+
+#bedtools closest was used to find the closest CG, CHG, CHH differentially
+#methylated tile to 1. all structural TEs 2. The DST transcripts identified
+#by de novo transcriptome analysis 3. The Milhouse (DST1) family of TEs
+#The output has 5 distances - closest to CG, CHG, CHH DMTs, a more permissive
+#CHH DMT cut-off, a more restrictive CHH (hyperCHH) cut-off
+
+Struct_TE_Closest=read.table("Minimal_HomTEs.CLOSEST_DMT.txt", sep="\t", header=FALSE)
+DST_Closest=read.table("DSTs.CLOSEST_DMT.txt", sep="\t", header=FALSE)
+Milhouse_Closest=read.table("Milhouses.CLOSEST_DMT.txt", sep="\t", header=FALSE)
+
+Struct_TE_Closest_CG=subset(Struct_TE_Closest, V5 == "CG")
+Struct_TE_Closest_CHG=subset(Struct_TE_Closest, V5 == "CHG")
+Struct_TE_Closest_CHH=subset(Struct_TE_Closest, V5 == "CHH")
+Struct_TE_Closest_CHH_Intermediate=subset(Struct_TE_Closest, V5 == "CHH_Intermediate")
+Struct_TE_Closest_CHH_Hyper=subset(Struct_TE_Closest, V5 == "HyperCHH")
+
+DST_Closest_CG=subset(DST_Closest, V5 == "CG")
+DST_Closest_CHG=subset(DST_Closest, V5 == "CHG")
+DST_Closest_CHH=subset(DST_Closest, V5 == "CHH")
+DST_Closest_CHH_Intermediate=subset(DST_Closest, V5 == "CHH_Intermediate")
+DST_Closest_CHH_Hyper=subset(DST_Closest, V5 == "HyperCHH")
+
+Milhouse_Closest_CG=subset(Milhouse_Closest, V5 == "CG")
+Milhouse_Closest_CHG=subset(Milhouse_Closest, V5 == "CHG")
+Milhouse_Closest_CHH=subset(Milhouse_Closest, V5 == "CHH")
+Milhouse_Closest_CHH_Intermediate=subset(Milhouse_Closest, V5 == "CHH_Intermediate")
+Milhouse_Closest_CHH_Hyper=subset(Milhouse_Closest, V5 == "HyperCHH")
+````
