@@ -107,4 +107,63 @@ Milhouse_Closest_CHG=subset(Milhouse_Closest, V5 == "CHG")
 Milhouse_Closest_CHH=subset(Milhouse_Closest, V5 == "CHH")
 Milhouse_Closest_CHH_Intermediate=subset(Milhouse_Closest, V5 == "CHH_Intermediate")
 Milhouse_Closest_CHH_Hyper=subset(Milhouse_Closest, V5 == "HyperCHH")
+
+#I'm actually going back to the initially imported sheets and summarizing by sub-category
+#Getting counts of how many of each list have elements within 500 bp, 1000 bp...
+table(Struct_TE_Closest$V5, Struct_TE_Closest$V11<500)
+table(Struct_TE_Closest$V5, Struct_TE_Closest$V11<1000)
+table(Struct_TE_Closest$V5, Struct_TE_Closest$V11<2000)
+
+table(Struct_TE_UP_Closest$V5, Struct_TE_UP_Closest$V11<500)
+table(Struct_TE_UP_Closest$V5, Struct_TE_UP_Closest$V11<1000)
+table(Struct_TE_UP_Closest$V5, Struct_TE_UP_Closest$V11<2000)
+
+table(DST_Closest$V5, DST_Closest$V11<500)
+table(DST_Closest$V5, DST_Closest$V11<1000)
+table(DST_Closest$V5, DST_Closest$V11<2000)
+````
+
+I'm a little bit surprised by the results of this analysis -- it seems that relatively few homology TEs have CHH DMTs in or near the element \
+I'm wondering if this is based on the filters I've put in place - in other words, how many of these elements had the potential to be \
+classified as CHH-DMTs? (they need data in both TC and Mutant)
+
+As an example here are the counts for within 2kb of all Struct TEs followed by within 2kb of DE-Up TEs\
+`````
+StructTEs w/in 2kb
+                   FALSE TRUE
+  CG                3742 2290
+  CHG               3189 2843
+  CHH               4124 1908
+  CHH_Intermediate  3813 2219
+  HyperCHH          5619  413
+`````
+
+`````
+ DE-UP TEs w/in 2kb
+                    FALSE TRUE
+  CG                  15    9
+  CHG                 13   11
+  CHH                 20    4
+  CHH_Intermediate    19    5
+  HyperCHH            23    1
+`````
+
+The numbers make a bit more sense for all DSTs and all Milhouse Family
+
+````
+DSTs w/in 2kb
+                   FALSE TRUE
+  CG                   4    3
+  CHG                  2    5
+  CHH                  2    5
+  CHH_Intermediate     1    6
+  HyperCHH             5    2
+
+Milhouse w/in 2kb
+                   FALSE TRUE
+  CG                   8    7
+  CHG                  3   12
+  CHH                  5   10
+  CHH_Intermediate     5   10
+  HyperCHH             8    7
 ````
