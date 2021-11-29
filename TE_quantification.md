@@ -22,7 +22,7 @@ To do this I am creating a .bed file of the Structural TEs and a .bed file that 
 
 ## STRUCTURAL_MINIMAL
 Because the above includes some repetitive and/or TE elements, I am filtering a few categories \
-After filtering I am left with 6,445 elements (see image below) \
+After filtering I am left with 6,369 elements (see image below) \
 Using bedtools again to determine how many Mb of the genome this represents \
 
 ````
@@ -30,7 +30,8 @@ Using bedtools again to determine how many Mb of the genome this represents \
 bedtools subtract -a Svm_Chrs.bed -b Svm_STRUCT_TE_MINIMAL.bed > Svm_Chrs_minusSTRUCT_TEs.bed
 ````
 
-![image](https://user-images.githubusercontent.com/43852873/140174571-3ccb72de-5874-489e-9ec4-027491e64505.png)
+![image](https://user-images.githubusercontent.com/43852873/143952866-de427389-58a5-438b-b5dd-6299b05106e9.png)
+
 
 ## HOMOLOGY
 In total, 262,976 elements were identified (see image)
